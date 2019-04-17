@@ -1,3 +1,4 @@
 tmp
 dockerfile
 api
+vendor/github.com
