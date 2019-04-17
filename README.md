@@ -24,7 +24,7 @@ export apiKey=xxxxxx
 `apiKey` is an unique string you create for the api to be accessed from a client.
 
 ## Running
-After you have created `secrets.env` you can procede to running the api.
+After you have created `secrets.env` you can procede to run the api.
 
 ```bash
 source secrets.env
