@@ -32,5 +32,5 @@ func main() {
 
 	router := NewRouter()
 	log.Printf("port: %v", os.Getenv("PORT"))
-	log.Fatal(http.ListenAndServe(os.Getenv("PORT"), router))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), router))
 }
