@@ -19,6 +19,8 @@ func main() {
 		DBName:     os.Getenv("dbName"),
 		DBHost:     os.Getenv("dbHost"),
 	}
+
+	log.Println(Constants)
 	err := IntializeDatabase()
 	if err != nil {
 		log.Fatal(err)
