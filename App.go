@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"models"
 	"net/http"
@@ -27,9 +26,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	log.Println("Database initialized")
 	UpdateUserList()
-	router := NewRouter()
+	log.Println("User list updated")
 
-	fmt.Printf("port: %v", os.Getenv("PORT"))
+	router := NewRouter()
+	log.Printf("port: %v", os.Getenv("PORT"))
 	log.Fatal(http.ListenAndServe(os.Getenv("PORT"), router))
 }
