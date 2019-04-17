@@ -23,6 +23,7 @@ func IntializeDatabase() (err error) {
 
 	for i := 0; i < 30; i++ {
 		log.Printf("trying to connect to database, attempt: %v", i+1)
+		log.Println(os.Getenv("DATABASE_URL"))
 		database, err = gorm.Open("postgres", os.Getenv("DATABASE_URL"))
 		if err != nil {
 			time.Sleep(1 * time.Second)
