@@ -9,6 +9,37 @@ import (
 	"net/http"
 )
 
+// UsersHandler returns a list of the users
+func UsersHandler(w http.ResponseWriter, r *http.Request) {
+	apikey := r.URL.Query().Get("apikey")
+	if apikey != Constants.APIKey {
+		log.Printf("invalid apikey: {%v}", apikey)
+		w.WriteHeader(http.StatusForbidden)
+		w.Write([]byte("invalid apikey"))
+		return
+	}
+
+	users, err := GetAllUsers()
+	if err != nil {
+		log.Printf("problem accessing database: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("problem accessing database"))
+		return
+	}
+
+	b, err := json.Marshal(users)
+	if err != nil {
+		log.Printf("problem marshalling data: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("problem marshalling data"))
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(b)
+}
+
 // EventHandler figures out what type of event was triggered and routes the event to the correct handler
 func EventHandler(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)

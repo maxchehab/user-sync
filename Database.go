@@ -1,9 +1,7 @@
 package main
 
 import (
-	"log"
 	"models"
-	"os"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -13,37 +11,13 @@ var database *gorm.DB
 
 // IntializeDatabase creates tables for all of the models
 func IntializeDatabase() (err error) {
-	// set up DB connection
-	// then attempt to connect 10 times over 10 seconds
-	//connectionParams := "user=docker password=docker sslmode=disable host=db"
-	//connectionWithDatabaseParams := "user=docker password=docker sslmode=disable host=db dbname=usersync"
-	// connectionParams := fmt.Sprintf("user=%v password=%v sslmode=disable host=%v", Constants.DBUser, Constants.DBPassword, Constants.DBHost)
-	// connectionWithDatabaseParams := fmt.Sprintf("user=%v password=%v sslmode=disable host=%v dbname=%v", Constants.DBUser, Constants.DBPassword, Constants.DBHost, Constants.DBName)
-
-	// for i := 0; i < 30; i++ {
-	// log.Printf("trying to connect to database, attempt: %v", i+1)
-	log.Println(os.Getenv("DATABASE_URL"))
-	database, err = gorm.Open("postgres", os.Getenv("DATABASE_URL"))
-	// 	if err != nil {
-	// 		time.Sleep(1 * time.Second)
-	// 		continue
-	// 	}
-
-	// 	// log.Printf("creating database '%v'", "usersync")
-	// 	// database.Exec("CREATE DATABASE " + "usersync")
-
-	// 	// database, err = gorm.Open("postgres", connectionWithDatabaseParams)
-	// 	// if err == nil {
-	// 	// 	break
-	// 	// }
-	// }``
+	database, err = gorm.Open("postgres", Constants.DBUrl)
 	if err != nil {
-		return
+		return err
 	}
-
 	database.AutoMigrate(&models.SlackProfile{}, &models.User{})
 
-	return
+	return nil
 }
 
 // InsertOrUpdateUser inserts or updates a user into the database
@@ -53,6 +27,26 @@ var InsertOrUpdateUser = func(user models.User) error {
 		return database.Save(&user).Error
 	}
 	return UpdateUser(user)
+}
+
+// GetAllUsers gets all the users and returns them
+var GetAllUsers = func() ([]*models.User, error) {
+	var shallowUsers = []models.User{}
+	err := database.Find(&shallowUsers).Error
+	if err != nil {
+		return nil, err
+	}
+
+	var users = []*models.User{}
+	for _, u := range shallowUsers {
+		user, err := GetUserBySlackID(u.SlackID)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
 }
 
 // UpdateUser updates a user informations

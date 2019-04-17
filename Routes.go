@@ -38,4 +38,10 @@ var routes = Routes{
 		"/",
 		EventHandler,
 	},
+	Route{
+		"Users",
+		"GET",
+		"/users",
+		UsersHandler,
+	},
 }

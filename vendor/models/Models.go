@@ -1,17 +1,24 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
+	"time"
 )
+
+// Model represents gorm.Model but with hidden json
+type Model struct {
+	ID        uint       `gorm:"primary_key" json:"-"`
+	CreatedAt time.Time  `json:"-"`
+	UpdatedAt time.Time  `json:"-"`
+	DeletedAt *time.Time `sql:"index" json:"-"`
+}
 
 // EnvConstants represents constants provided by the runtime environment
 type EnvConstants struct {
-	Token      string
-	BotToken   string
-	DBUser     string
-	DBPassword string
-	DBName     string
-	DBHost     string
+	Token    string
+	BotToken string
+	DBUrl    string
+	Port     string
+	APIKey   string
 }
 
 // URLVerificationModel represents post request body which slack requests during URL verification
@@ -49,7 +56,7 @@ type UserListResponse struct {
 
 // User represents a user in the installed Slack workspace
 type User struct {
-	gorm.Model
+	Model
 	ProfileID         uint         `json:"-"`
 	Profile           SlackProfile `json:"profile"`
 	SlackID           string       `json:"id" gorm:"index"`
@@ -74,7 +81,7 @@ type User struct {
 
 // SlackProfile represents the profile of a user
 type SlackProfile struct {
-	gorm.Model
+	Model
 	UserID                uint   `json:"-"`
 	Title                 string `json:"title"`
 	Phone                 string `json:"phone"`
