@@ -50,7 +50,7 @@ type UserListResponse struct {
 // User represents a user in the installed Slack workspace
 type User struct {
 	gorm.Model
-	ProfileID         uint         `json:"-" gorm:"ForeignKey:id"`
+	ProfileID         uint         `json:"-"`
 	Profile           SlackProfile `json:"profile"`
 	SlackID           string       `json:"id" gorm:"index"`
 	TeamID            string       `json:"team_id"`

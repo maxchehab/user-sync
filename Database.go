@@ -36,13 +36,12 @@ func IntializeDatabase() (err error) {
 	// 	// if err == nil {
 	// 	// 	break
 	// 	// }
-	// }
+	// }``
 	if err != nil {
 		return
 	}
 
 	database.AutoMigrate(&models.SlackProfile{}, &models.User{})
-	database.Model(&models.User{}).AddForeignKey("profile_id", "profile(id)", "CASCADE", "CASCADE")
 
 	return
 }
