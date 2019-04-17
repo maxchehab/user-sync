@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"models"
+	"os"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -18,24 +18,24 @@ func IntializeDatabase() (err error) {
 	// then attempt to connect 10 times over 10 seconds
 	//connectionParams := "user=docker password=docker sslmode=disable host=db"
 	//connectionWithDatabaseParams := "user=docker password=docker sslmode=disable host=db dbname=usersync"
-	connectionParams := fmt.Sprintf("user=%v password=%v sslmode=disable host=%v", Constants.DBUser, Constants.DBPassword, Constants.DBHost)
-	connectionWithDatabaseParams := fmt.Sprintf("user=%v password=%v sslmode=disable host=%v dbname=%v", Constants.DBUser, Constants.DBPassword, Constants.DBHost, Constants.DBName)
+	// connectionParams := fmt.Sprintf("user=%v password=%v sslmode=disable host=%v", Constants.DBUser, Constants.DBPassword, Constants.DBHost)
+	// connectionWithDatabaseParams := fmt.Sprintf("user=%v password=%v sslmode=disable host=%v dbname=%v", Constants.DBUser, Constants.DBPassword, Constants.DBHost, Constants.DBName)
 
 	for i := 0; i < 30; i++ {
 		log.Printf("trying to connect to database, attempt: %v", i+1)
-		database, err = gorm.Open("postgres", connectionParams)
+		database, err = gorm.Open("postgres", os.Getenv("DATABASE_URL"))
 		if err != nil {
 			time.Sleep(1 * time.Second)
 			continue
 		}
 
-		log.Printf("creating database '%v'", "usersync")
-		database.Exec("CREATE DATABASE " + "usersync")
+		// log.Printf("creating database '%v'", "usersync")
+		// database.Exec("CREATE DATABASE " + "usersync")
 
-		database, err = gorm.Open("postgres", connectionWithDatabaseParams)
-		if err == nil {
-			break
-		}
+		// database, err = gorm.Open("postgres", connectionWithDatabaseParams)
+		// if err == nil {
+		// 	break
+		// }
 	}
 	if err != nil {
 		return
