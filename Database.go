@@ -4,7 +4,6 @@ import (
 	"log"
 	"models"
 	"os"
-	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -21,23 +20,23 @@ func IntializeDatabase() (err error) {
 	// connectionParams := fmt.Sprintf("user=%v password=%v sslmode=disable host=%v", Constants.DBUser, Constants.DBPassword, Constants.DBHost)
 	// connectionWithDatabaseParams := fmt.Sprintf("user=%v password=%v sslmode=disable host=%v dbname=%v", Constants.DBUser, Constants.DBPassword, Constants.DBHost, Constants.DBName)
 
-	for i := 0; i < 30; i++ {
-		log.Printf("trying to connect to database, attempt: %v", i+1)
-		log.Println(os.Getenv("DATABASE_URL"))
-		database, err = gorm.Open("postgres", os.Getenv("DATABASE_URL"))
-		if err != nil {
-			time.Sleep(1 * time.Second)
-			continue
-		}
+	// for i := 0; i < 30; i++ {
+	// log.Printf("trying to connect to database, attempt: %v", i+1)
+	log.Println(os.Getenv("DATABASE_URL"))
+	database, err = gorm.Open("postgres", os.Getenv("DATABASE_URL"))
+	// 	if err != nil {
+	// 		time.Sleep(1 * time.Second)
+	// 		continue
+	// 	}
 
-		// log.Printf("creating database '%v'", "usersync")
-		// database.Exec("CREATE DATABASE " + "usersync")
+	// 	// log.Printf("creating database '%v'", "usersync")
+	// 	// database.Exec("CREATE DATABASE " + "usersync")
 
-		// database, err = gorm.Open("postgres", connectionWithDatabaseParams)
-		// if err == nil {
-		// 	break
-		// }
-	}
+	// 	// database, err = gorm.Open("postgres", connectionWithDatabaseParams)
+	// 	// if err == nil {
+	// 	// 	break
+	// 	// }
+	// }
 	if err != nil {
 		return
 	}
