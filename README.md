@@ -1,5 +1,5 @@
 # user-sync-api
-This api syncs a workspace's Slack directory while making use Slack's web api and webhooks.
+This api syncs a workspace's Slack directory while making use of Slack's web api and webhooks.
 
 ## Getting started
 ```bash
